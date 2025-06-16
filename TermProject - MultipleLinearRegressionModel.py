@@ -10,7 +10,7 @@ from sklearn.metrics import mean_squared_error, r2_score
 # Data Science Term Project
 # Modeling - Analysis - Evaluation Process
 
-# Model Selection : Linear Model (다중 선형 회귀 모델)
+# Model Selection : Linear Model (multiple linear regression model)
 # Analysis Process :
 # First - Date set split -> Train : Test = 8 : 2
 # Input Features - Total 7 : categorical 6 + number_of_reviews
@@ -35,13 +35,13 @@ from sklearn.metrics import mean_squared_error, r2_score
 # csv 파일 read
 df = pd.read_csv(r'C:\clean_NYC_v1.csv')
 
-# minmax scaling을 이용해서 number_of_reviews의 값 스케일링
+# minmax scaling -> scale 'number_of_reviews'
 mms_reviews = MinMaxScaler()
 df[['number_of_reviews']] = mms_reviews.fit_transform(df[['number_of_reviews']])
 
 # feature = X, target = Y
-# X1 = onehot encoding된  
-# 4개의 neighbourhood columns + 2개의 room type columns
+# X1 = onehot encoded  
+# four 'neighbourhood columns' + two 'room type' columns
 X1 = df.iloc[:, 16:-1] 
 X2 = df[['number_of_reviews']]
 X = pd.concat([X1, X2], axis=1)  
@@ -54,7 +54,7 @@ X_train, X_test, y_train, y_test = train_test_split(X, Y, test_size=0.2, random_
 reg = LinearRegression()
 reg.fit(X_train, y_train)
 
-# 예측 및 예측값 저장
+# predict and save predicted value
 
 y_pred = reg.predict(X_test)
 
@@ -84,15 +84,15 @@ plt.show()
 # 데이터를 넣으면 price값 predict 후 np.expm1을 통해 다시 $값으로 복원하여 출력
 
 def predict_price(onehot_array, num_review):
-    # onehot_array: 인코딩된 6개 컬럼 (neighborhood & room type)
-    # num_review: 원본 리뷰 수
+    # onehot_array: encoded 6 columns (neighborhood & room type)
+    # num_review: Original number of reviews
     review_scaled = mms_reviews.transform([[num_review]])[0, 0]
     input_data = np.array(onehot_array + [review_scaled]).reshape(1, -1)
     log_prediction = reg.predict(input_data)
     price = np.expm1(log_prediction[0, 0])
     print(f"예상 가격: {price:.2f} USD")
 
-# example -> onehot_array = OneHot 인코딩된 값들 - [neighbourhood_group_Brooklyn, Manhatten, Queens, State Island, room_type_Private room, room_type_Shared room]
+# example -> onehot_array = OneHot Encoded - [neighbourhood_group_Brooklyn, Manhatten, Queens, State Island, room_type_Private room, room_type_Shared room]
 # predict_price([0,0,1,0,0,1], 25)  
 
 # K-Fold : K = 5
