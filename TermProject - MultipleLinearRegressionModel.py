@@ -6,7 +6,7 @@ from sklearn.model_selection import train_test_split, cross_val_score, KFold
 from sklearn.preprocessing import MinMaxScaler
 from sklearn.metrics import mean_squared_error, r2_score
 
-# 2025.05.24. (202135844 최우진)
+# 2025.05.24. 
 # Data Science Term Project
 # Modeling - Analysis - Evaluation Process
 
